@@ -11,7 +11,8 @@
     "react/prefer-stateless-function": [0, { "ignorePureComponents": true }],
     "react/prop-types": 0,
     "react/destructuring-assignment": 0,
-    "key-spacing": 0
+    "key-spacing": 0,
+    "react/jsx-no-bind": 0
   },
   "parser": "babel-eslint"
 }

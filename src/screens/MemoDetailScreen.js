@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   editButton: {
-    top: 38,
+    top: 78,
   },
 });
 

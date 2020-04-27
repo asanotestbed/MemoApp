@@ -16,6 +16,7 @@ class LoginScreen extends React.Component {
 
   // eslint-disable-next-line
   handleSubmit() {
+    console.log('Auth started');
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => {
         const resetAction = StackActions.reset({
@@ -60,6 +61,7 @@ class LoginScreen extends React.Component {
         <TouchableHighlight
           style={styles.button}
           onPress={this.handleSubmit.bind(this)}
+          underlayColor="#c70f66"
         >
           <Text style={styles.buttonTitle}>ログインする</Text>
         </TouchableHighlight>

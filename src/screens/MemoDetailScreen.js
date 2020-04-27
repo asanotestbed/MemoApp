@@ -16,13 +16,13 @@ class MemoDetailScreen extends React.Component {
     };
   }
 
-  returnMemo(memo) {
-    this.setState({ memo });
-  }
-
   componentDidMount() {
     const { params } = this.props.navigation.state;
     this.setState({ memo: params.memo });
+  }
+
+  returnMemo(memo) {
+    this.setState({ memo });
   }
 
   render() {
@@ -34,7 +34,7 @@ class MemoDetailScreen extends React.Component {
         <View>
           <View style={styles.memoHeader}>
             <View>
-              <Text style={styles.memoHeaderTitle}>{String(memo.body).substring(0,10)}</Text>
+              <Text style={styles.memoHeaderTitle}>{String(memo.body).substring(0, 10)}</Text>
               <Text style={styles.memoHeaderDate}>{dateString(memo.createdOn)}</Text>
             </View>
           </View>

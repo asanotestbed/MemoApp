@@ -4,30 +4,63 @@ import {
 } from 'react-native';
 import firebase from 'firebase';
 import { NavigationActions, StackActions } from 'react-navigation';
+import * as SecureStore from 'expo-secure-store';
+
+import Loading from '../elements/Loading';
 
 class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: 'a@example.com',
-      password: 'aaaaaa',
+      email: '',
+      password: '',
+      isLoading: true,
     };
+  }
+
+  async componentDidMount() {
+    const email = await SecureStore.getItemAsync('email');
+    const password = await SecureStore.getItemAsync('password');
+    if (email === '' || password === '') {
+      this.setState({ isLoading: false });
+      return;
+    }
+    console.log('Auto auth started');
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(() => {
+        this.navigateToHome();
+        this.setState({ isLoading: false });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({ isLoading: false });
+      });
+  }
+
+  navigateToHome() {
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Home' }),
+      ],
+    });
+    this.props.navigation.dispatch(resetAction);
   }
 
   // eslint-disable-next-line
   handleSubmit() {
     console.log('Auth started');
+    this.setState({ isLoading: true });
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => {
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({ routeName: 'Home' }),
-          ],
-        });
-        this.props.navigation.dispatch(resetAction);
+        SecureStore.setItemAsync('email', this.state.email);
+        SecureStore.setItemAsync('password', this.state.password);
+        this.navigateToHome();
+        this.setState({ isLoading: false });
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
+        this.setState({ isLoading: false });
       });
   }
 
@@ -38,6 +71,7 @@ class LoginScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <Loading text="ログイン中" isLoading={this.state.isLoading} />
         <Text style={styles.title}>
           ログイン
         </Text>
